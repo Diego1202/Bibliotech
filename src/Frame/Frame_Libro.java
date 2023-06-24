@@ -24,7 +24,6 @@ import proyecto_biblioteca.LibroBeans;
  * @author ceden
  */
 public class Frame_Libro extends javax.swing.JFrame {
-
     
     LibroBeans libro;
 
