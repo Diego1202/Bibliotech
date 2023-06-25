@@ -62,7 +62,7 @@ public class EditorialBeans {
     }
     
     public ResultSet Consulta_Editorial(){
-        return (ResultSet) bd.consultaBD("SELECT * FROM Editorial");
+        return (ResultSet) bd.consultaBD("SELECT id_editorial as id, nombre, id_editorial as ' ' FROM Editorial");
     }    
     
     public ResultSet Consultar_Editorial_ID() {
