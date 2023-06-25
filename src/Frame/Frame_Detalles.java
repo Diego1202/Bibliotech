@@ -51,6 +51,8 @@ public class Frame_Detalles extends javax.swing.JFrame {
     }
 
     private void rellenar() {
+        devolucion.setId_Prestamo(id_Prestamo);
+        System.out.println("El id del prestamo es: " + devolucion.getId_Prestamo());
         ResultSet result = devolucion.Consultar_Prestamos();
         try {
             while (result.next()) {
@@ -59,17 +61,18 @@ public class Frame_Detalles extends javax.swing.JFrame {
                 Libro_Prestamo.setText(result.getString(3));
                 Fecha_Prestamo.setText(result.getString(4));
                 String fechaDevolucion = result.getString(5);
-                System.out.println("La fecha de prestamo es: " + fechaDevolucion);
                 if (fechaDevolucion.equals("0")) {
                     Fecha_Devolucion.setVisible(false);
                     jLabel5.setVisible(false);
+                    Libro_Devuelto.setVisible(true);
+                    Boton.setVisible(true);
                     Boton.setText("Devolver");
                 } else {
                     Fecha_Devolucion.setVisible(true);
                     jLabel5.setVisible(true);
                     Libro_Devuelto.setVisible(false);
-                    Fecha_Devolucion.setText(result.getString(5));
                     Boton.setVisible(false);
+                    Fecha_Devolucion.setText(result.getString(5));
                     Regresar.setText("Regresar");
                 }
             }

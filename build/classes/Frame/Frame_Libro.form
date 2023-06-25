@@ -51,7 +51,7 @@
               <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="Regresar" alignment="1" pref="106" max="32767" attributes="0"/>
-                  <Component id="jButton1" alignment="1" pref="106" max="32767" attributes="0"/>
+                  <Component id="Actualizar" alignment="1" pref="106" max="32767" attributes="0"/>
                   <Component id="Nuevo" alignment="0" max="32767" attributes="0"/>
                   <Component id="Agregar" alignment="0" max="32767" attributes="0"/>
               </Group>
@@ -64,9 +64,9 @@
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="167" max="-2" attributes="0"/>
-              <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+              <Component id="Agregar_Autor" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
-              <Component id="jButton3" min="-2" max="-2" attributes="0"/>
+              <Component id="Agregar_Editorial" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="190" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -108,8 +108,8 @@
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jButton2" min="-2" pref="28" max="-2" attributes="0"/>
-                          <Component id="jButton3" min="-2" pref="28" max="-2" attributes="0"/>
+                          <Component id="Agregar_Autor" min="-2" pref="28" max="-2" attributes="0"/>
+                          <Component id="Agregar_Editorial" min="-2" pref="28" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -118,7 +118,7 @@
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                       <Component id="Agregar" min="-2" pref="30" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                      <Component id="jButton1" min="-2" pref="30" max="-2" attributes="0"/>
+                      <Component id="Actualizar" min="-2" pref="30" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                       <Component id="Regresar" min="-2" pref="30" max="-2" attributes="0"/>
                   </Group>
@@ -280,7 +280,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="Actualizar">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="9b" green="8d" red="7a" type="rgb"/>
@@ -294,10 +294,10 @@
         <Property name="text" type="java.lang.String" value="Actualizar"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ActualizarActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="Agregar_Autor">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="9b" green="8d" red="7a" type="rgb"/>
@@ -311,10 +311,10 @@
         <Property name="text" type="java.lang.String" value="Agregar Autor"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Agregar_AutorActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton3">
+    <Component class="javax.swing.JButton" name="Agregar_Editorial">
       <Properties>
         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="9b" green="8d" red="7a" type="rgb"/>
@@ -328,7 +328,7 @@
         <Property name="text" type="java.lang.String" value="Agregar Editorial"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="Agregar_EditorialActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

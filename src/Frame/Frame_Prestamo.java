@@ -74,7 +74,6 @@ public class Frame_Prestamo extends javax.swing.JFrame {
                 Frame_Detalles detalle = new Frame_Detalles(Integer.parseInt(valorSeleccionado.toString()));
                 detalle.setVisible(true);
                 cierre();
-                System.out.println("Se hace click");
             }
         });
     }

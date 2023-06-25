@@ -57,7 +57,15 @@ public class Frame_AgregarPrestamo extends javax.swing.JFrame {
         agregarPersonaMouseListener();
         agregarLibroMouseListener();
     }
+    
+    @Override
+    public Image getIconImage() {
+        Image retValue = Toolkit.getDefaultToolkit().
+                getImage(ClassLoader.getSystemResource("resources/Icono_Logo.png"));
 
+        return retValue;
+    }
+    
     private void fecha() {
         Fecha_Prestamo.setEditable(false);
 
@@ -195,6 +203,7 @@ public class Frame_AgregarPrestamo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Agregar Prestamo");
+        setIconImage(getIconImage());
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 33, 74));

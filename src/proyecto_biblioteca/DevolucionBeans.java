@@ -75,12 +75,13 @@ public class DevolucionBeans {
     }
 
     public ResultSet Consultar_Prestamos() {
+        System.out.println("Debe mostrar: " + this.getId_Prestamo());
         return (ResultSet) bd.consultaBD("""
                                          SELECT p.NOMBRE, p.APELLIDO, l.NOMBRE AS NOMBRE_LIBRO, pr.fecha, CASE WHEN d.ID_DEVOLUCION IS NULL THEN false ELSE d.fecha END AS ESTADO_DEVOLUCION
                                          FROM PERSONA p
                                          JOIN PRESTAMO pr ON p.ID_PERSONA = pr.ID_PERSONA
                                          JOIN LIBRO l ON pr.ID_LIBRO = l.ID_LIBRO
-                                         LEFT JOIN DEVOLUCION d ON pr.ID_PRESTAMO = d.ID_PRESTAMOS;""");
+                                         LEFT JOIN DEVOLUCION d ON pr.ID_PRESTAMO = d.ID_PRESTAMOS where pr.id_prestamo="""+this.getId_Prestamo());
     }
 
     public void Actualizar_Prestamo() {
