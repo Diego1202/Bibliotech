@@ -80,7 +80,7 @@ public class AutorBeans {
     }
 
     public ResultSet Consultar_Autor() {
-        return (ResultSet) bd.consultaBD("Select * from autor");
+        return (ResultSet) bd.consultaBD("Select id_autor as id, nombre, apellido, Nacionalidad, id_autor as ' ' from autor");
     }
 
     public ResultSet Consultar_Autor_ID() {

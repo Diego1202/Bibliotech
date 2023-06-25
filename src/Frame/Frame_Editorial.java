@@ -5,6 +5,7 @@
 package Frame;
 
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -35,6 +36,14 @@ public class Frame_Editorial extends javax.swing.JFrame {
         setLocationRelativeTo(null);        
         setResizable(false);
     }
+    
+    @Override
+    public Image getIconImage() {
+        Image retValue = Toolkit.getDefaultToolkit().
+                getImage(ClassLoader.getSystemResource("resources/Icono_Logo.png"));
+
+        return retValue;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -46,6 +55,8 @@ public class Frame_Editorial extends javax.swing.JFrame {
     private void initComponents() {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Registo de Editoriales");
+        setIconImage(getIconImage());
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

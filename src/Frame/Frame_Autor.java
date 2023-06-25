@@ -7,14 +7,19 @@ package Frame;
 import com.mysql.jdbc.ResultSet;
 import com.mysql.jdbc.ResultSetMetaData;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import proyecto_biblioteca.AutorBeans;
 
@@ -48,17 +53,37 @@ public class Frame_Autor extends javax.swing.JFrame {
         Id_Autor.setFocusable(false);
         this.mostrar();
 
+        JTAutorClickMouse();
+
+    }
+
+    private void JTAutorClickMouse() {
         Autor_Tabla.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 int filaSeleccionada = Autor_Tabla.rowAtPoint(e.getPoint());
                 int columnaSeleccionada = 0; // Primera columna
-                Object valorSeleccionado = Autor_Tabla.getValueAt(filaSeleccionada, columnaSeleccionada);
-                // Utiliza el valor seleccionado según tus necesidades
-                actualizarInformacion(valorSeleccionado.toString());
+                int columnparaComparar = Autor_Tabla.columnAtPoint(e.getPoint());
+                int columnaUltima = Autor_Tabla.getColumnCount() - 1;
+                if (columnparaComparar == columnaUltima) {
+                    Object valorUltimaColumna = Autor_Tabla.getValueAt(filaSeleccionada, columnaSeleccionada);
+                    nuevoMetodo(valorUltimaColumna.toString());
+                } else {
+                    Object valorSeleccionado = Autor_Tabla.getValueAt(filaSeleccionada, columnaSeleccionada);
+                    // Utiliza el valor seleccionado según tus necesidades
+                    actualizarInformacion(valorSeleccionado.toString());
+                    Agregar.setVisible(false);
+                }
             }
         });
+    }
 
+    @Override
+    public Image getIconImage() {
+        Image retValue = Toolkit.getDefaultToolkit().
+                getImage(ClassLoader.getSystemResource("resources/Icono_Logo.png"));
+
+        return retValue;
     }
 
     private void actualizarInformacion(String valorSeleccionado) {
@@ -88,16 +113,42 @@ public class Frame_Autor extends javax.swing.JFrame {
             ResultSetMetaData rsmd;
             rsmd = (ResultSetMetaData) result.getMetaData();
             for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-                modelo.addColumn(rsmd.getColumnLabel(i));
+                modelo.addColumn(rsmd.getColumnLabel(i).toUpperCase());
             }
             while (result.next()) {
                 Object[] columna = new Object[rsmd.getColumnCount()];
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                    columna[i] = result.getObject(i + 1);
+                    if ((rsmd.getColumnCount() - 1) == i) {
+                        columna[i] = "Eliminar";
+                    } else {
+                        columna[i] = result.getObject(i + 1);
+                    }
                 }
                 modelo.addRow(columna);
             }
-        } catch (Exception e) {
+            DefaultTableCellRenderer columnRenderer = new DefaultTableCellRenderer() {
+                @Override
+                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                    Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                    // Verificar si es la última columna y establecer estilo de fuente negrita
+                    int lastColumn = table.getColumnCount() - 1;
+                    if (column == lastColumn) {
+                        component.setFont(component.getFont().deriveFont(Font.BOLD)); // Establecer negrita
+                        component.setForeground(Color.RED); // Establecer color rojo
+                    } else {
+                        component.setFont(table.getFont());
+                        component.setForeground(table.getForeground());
+                    }
+
+                    return component;
+                }
+            };
+
+            // Asignar el renderizador de celdas a la última columna
+            int lastColumnIndex = Autor_Tabla.getColumnCount() - 1;
+            Autor_Tabla.getColumnModel().getColumn(lastColumnIndex).setCellRenderer(columnRenderer);
+        } catch (SQLException e) {
         }
     }
 
@@ -105,6 +156,19 @@ public class Frame_Autor extends javax.swing.JFrame {
         Nombre.setText(null);
         Apellido.setText(null);
         Nacionalidad.setText(null);
+        Agregar.setVisible(true);
+    }
+
+    public void nuevoMetodo(String parametro) {
+        autor.setId_Autor(Integer.parseInt(parametro));
+        int opcion = JOptionPane.showConfirmDialog(null, "¿Deseas eliminar el registro?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        if (opcion == JOptionPane.YES_OPTION) {
+            autor.Eliminar_Autor();
+            JOptionPane.showMessageDialog(null, "El registro ha sido eliminado exitosamente.", "Eliminación", JOptionPane.INFORMATION_MESSAGE);
+            Id_Autor.setText(null);
+            nuevo();
+            this.mostrar();
+        }
     }
 
     /**
@@ -130,10 +194,10 @@ public class Frame_Autor extends javax.swing.JFrame {
         Nuevo = new javax.swing.JButton();
         Agregar = new javax.swing.JButton();
         Actualizar = new javax.swing.JButton();
-        Eliminar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Frame Libro");
+        setTitle("Registro de Libros");
+        setIconImage(getIconImage());
 
         Regresar.setBackground(new java.awt.Color(122, 141, 155));
         Regresar.setFont(new java.awt.Font("Verdana", 1, 13)); // NOI18N
@@ -202,15 +266,6 @@ public class Frame_Autor extends javax.swing.JFrame {
             }
         });
 
-        Eliminar.setBackground(new java.awt.Color(122, 141, 155));
-        Eliminar.setFont(new java.awt.Font("Verdana", 1, 13)); // NOI18N
-        Eliminar.setText("Eliminar");
-        Eliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                EliminarActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -233,8 +288,7 @@ public class Frame_Autor extends javax.swing.JFrame {
                     .addComponent(Agregar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(Regresar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
                     .addComponent(Nuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Actualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(Eliminar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Actualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(42, 42, 42))
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
@@ -258,19 +312,18 @@ public class Frame_Autor extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(Apellido, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)))
+                            .addComponent(jLabel3))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(Nacionalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)))
                     .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(10, 10, 10)
                         .addComponent(Agregar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(9, 9, 9)
+                        .addGap(10, 10, 10)
                         .addComponent(Actualizar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(Eliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Nacionalidad, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4)
-                    .addComponent(Regresar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
+                        .addComponent(Regresar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(20, 20, 20)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 157, Short.MAX_VALUE)
                 .addGap(20, 20, 20))
@@ -280,9 +333,10 @@ public class Frame_Autor extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void RegresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegresarActionPerformed
-        Frame_Persona persona = new Frame_Persona();
-        persona.setVisible(true);
+        Frame_Libro libro = new Frame_Libro();
+        libro.setVisible(true);
         this.setVisible(false);
+        autor.cerrar();
     }//GEN-LAST:event_RegresarActionPerformed
 
     private void NacionalidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NacionalidadActionPerformed
@@ -329,28 +383,11 @@ public class Frame_Autor extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ActualizarActionPerformed
 
-    private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
-        if (!Id_Autor.getText().isBlank() && !Nombre.getText().isBlank() && !Apellido.getText().isBlank() && !Nacionalidad.getText().isBlank()) {
-            autor.setId_Autor(Integer.parseInt(Id_Autor.getText()));
-            int opcion = JOptionPane.showConfirmDialog(null, "¿Deseas eliminar el registro?", "Confirmación", JOptionPane.YES_NO_OPTION);
-            if (opcion == JOptionPane.YES_OPTION) {
-                autor.Eliminar_Autor();
-                JOptionPane.showMessageDialog(null, "El registro ha sido eliminado exitosamente.", "Eliminación", JOptionPane.INFORMATION_MESSAGE);
-                Id_Autor.setText(null);
-                nuevo();
-                this.mostrar();
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Seleccione la persona que desea eliminar.", "Advertencia", JOptionPane.INFORMATION_MESSAGE);
-        }
-    }//GEN-LAST:event_EliminarActionPerformed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Actualizar;
     private javax.swing.JButton Agregar;
     private javax.swing.JTextField Apellido;
     private javax.swing.JTable Autor_Tabla;
-    private javax.swing.JButton Eliminar;
     private javax.swing.JTextField Id_Autor;
     private javax.swing.JTextField Nacionalidad;
     private javax.swing.JTextField Nombre;

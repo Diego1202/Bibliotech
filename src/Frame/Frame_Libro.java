@@ -61,8 +61,8 @@ public class Frame_Libro extends javax.swing.JFrame {
         comboAutores(Autores);
         JTLibroClickMouse();
     }
-    
-    private void JTLibroClickMouse(){
+
+    private void JTLibroClickMouse() {
         JTLibros.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -138,28 +138,28 @@ public class Frame_Libro extends javax.swing.JFrame {
                 modelo.addRow(columna);
             }
             // Crear renderizador de celdas personalizado
-        DefaultTableCellRenderer columnRenderer = new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            DefaultTableCellRenderer columnRenderer = new DefaultTableCellRenderer() {
+                @Override
+                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                    Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-                // Verificar si es la última columna y establecer estilo de fuente negrita
-                int lastColumn = table.getColumnCount() - 1;
-                if (column == lastColumn) {
-                    component.setFont(component.getFont().deriveFont(Font.BOLD)); // Establecer negrita
-                    component.setForeground(Color.RED); // Establecer color rojo
-                } else {
-                    component.setFont(table.getFont());
-                    component.setForeground(table.getForeground());
+                    // Verificar si es la última columna y establecer estilo de fuente negrita
+                    int lastColumn = table.getColumnCount() - 1;
+                    if (column == lastColumn) {
+                        component.setFont(component.getFont().deriveFont(Font.BOLD)); // Establecer negrita
+                        component.setForeground(Color.RED); // Establecer color rojo
+                    } else {
+                        component.setFont(table.getFont());
+                        component.setForeground(table.getForeground());
+                    }
+
+                    return component;
                 }
+            };
 
-                return component;
-            }
-        };
-
-        // Asignar el renderizador de celdas a la última columna
-        int lastColumnIndex = JTLibros.getColumnCount() - 1;
-        JTLibros.getColumnModel().getColumn(lastColumnIndex).setCellRenderer(columnRenderer);
+            // Asignar el renderizador de celdas a la última columna
+            int lastColumnIndex = JTLibros.getColumnCount() - 1;
+            JTLibros.getColumnModel().getColumn(lastColumnIndex).setCellRenderer(columnRenderer);
         } catch (SQLException e) {
         }
     }
@@ -168,7 +168,7 @@ public class Frame_Libro extends javax.swing.JFrame {
         Nombre_Libro.setText(null);
         Fecha_Publicacion.setDate(null);
     }
-    
+
     public void nuevoMetodo(String parametro) {
         libro.setId_Libro(Integer.parseInt(parametro));
         int opcion = JOptionPane.showConfirmDialog(null, "¿Deseas eliminar el registro?", "Confirmación", JOptionPane.YES_NO_OPTION);
@@ -209,7 +209,7 @@ public class Frame_Libro extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Frame Libro");
+        setTitle("Registro de Libros");
         setIconImage(getIconImage());
 
         Regresar.setBackground(new java.awt.Color(122, 141, 155));
@@ -411,7 +411,7 @@ public class Frame_Libro extends javax.swing.JFrame {
     }//GEN-LAST:event_RegresarActionPerformed
 
     private void EditorialesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditorialesActionPerformed
-        
+
     }//GEN-LAST:event_EditorialesActionPerformed
 
     private void AutoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AutoresActionPerformed

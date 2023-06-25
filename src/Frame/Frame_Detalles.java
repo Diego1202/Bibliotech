@@ -118,6 +118,7 @@ public class Frame_Detalles extends javax.swing.JFrame {
         Fecha_Devolucion = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Verificacion de Devolucion");
         setIconImage(getIconImage());
 
         jPanel1.setBackground(new java.awt.Color(237, 208, 198));
