@@ -47,6 +47,7 @@ public final class Frame_Persona extends javax.swing.JFrame {
         int width = pantalla.width;
         setSize(width / 2, height / 2);
         setLocationRelativeTo(null);
+        setResizable(false);
         ID_Persona.setFocusable(false);
         this.mostrar();
         // Agrega el MouseListener a la tabla Persona_Tabla

@@ -90,7 +90,7 @@ public class LibroBeans {
     }
 
     public ResultSet Consultar_Libro() {
-        return (ResultSet) bd.consultaBD("SELECT libro.id_libro, autor.nombre as 'Autor', editorial.nombre as 'Editorial', libro.nombre, libro.fecha_publicacion FROM " +
+        return (ResultSet) bd.consultaBD("SELECT libro.id_libro as id, autor.nombre as 'Autor', editorial.nombre as 'Editorial', libro.nombre, libro.fecha_publicacion, libro.id_libro as ' ' FROM " +
 "autor inner join (editorial inner join libro on editorial.id_editorial = libro.id_editorial) on libro.id_autor = autor.id_autor");
     }
 

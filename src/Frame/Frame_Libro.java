@@ -7,15 +7,22 @@ package Frame;
 import com.mysql.jdbc.ResultSet;
 import com.mysql.jdbc.ResultSetMetaData;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Date;
 import java.sql.SQLException;
 import javax.swing.JComboBox;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import proyecto_biblioteca.LibroBeans;
 
@@ -24,7 +31,7 @@ import proyecto_biblioteca.LibroBeans;
  * @author ceden
  */
 public class Frame_Libro extends javax.swing.JFrame {
-    
+
     LibroBeans libro;
 
     /**
@@ -39,7 +46,7 @@ public class Frame_Libro extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         getContentPane().setBackground(new java.awt.Color(237, 208, 198));
-        
+
         initComponents();
         libro = new LibroBeans();
         Dimension pantalla = Toolkit.getDefaultToolkit().getScreenSize();
@@ -47,11 +54,33 @@ public class Frame_Libro extends javax.swing.JFrame {
         int width = pantalla.width;
         setSize(width / 2, height / 2);
         setLocationRelativeTo(null);
+        setResizable(false);
         ID_Libro.setFocusable(false);
         this.mostrar();
         comboEditoriales(Editoriales);
         comboAutores(Autores);
-
+        JTLibroClickMouse();
+    }
+    
+    private void JTLibroClickMouse(){
+        JTLibros.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int filaSeleccionada = JTLibros.rowAtPoint(e.getPoint());
+                int columnaSeleccionada = 0; // Primera columna
+                int columnparaComparar = JTLibros.columnAtPoint(e.getPoint());
+                int columnaUltima = JTLibros.getColumnCount() - 1;
+                if (columnparaComparar == columnaUltima) {
+                    Object valorUltimaColumna = JTLibros.getValueAt(filaSeleccionada, columnaSeleccionada);
+                    nuevoMetodo(valorUltimaColumna.toString());
+                } else {
+                    Object valorSeleccionado = JTLibros.getValueAt(filaSeleccionada, columnaSeleccionada);
+                    // Utiliza el valor seleccionado según tus necesidades
+                    //actualizarInformacion(valorSeleccionado.toString());
+                    Agregar.setVisible(false);
+                }
+            }
+        });
     }
 
     @Override
@@ -100,10 +129,37 @@ public class Frame_Libro extends javax.swing.JFrame {
             while (result.next()) {
                 Object[] columna = new Object[rsmd.getColumnCount()];
                 for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                    columna[i] = result.getObject(i + 1);
+                    if ((rsmd.getColumnCount() - 1) == i) {
+                        columna[i] = "Eliminar";
+                    } else {
+                        columna[i] = result.getObject(i + 1);
+                    }
                 }
                 modelo.addRow(columna);
             }
+            // Crear renderizador de celdas personalizado
+        DefaultTableCellRenderer columnRenderer = new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                Component component = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+                // Verificar si es la última columna y establecer estilo de fuente negrita
+                int lastColumn = table.getColumnCount() - 1;
+                if (column == lastColumn) {
+                    component.setFont(component.getFont().deriveFont(Font.BOLD)); // Establecer negrita
+                    component.setForeground(Color.RED); // Establecer color rojo
+                } else {
+                    component.setFont(table.getFont());
+                    component.setForeground(table.getForeground());
+                }
+
+                return component;
+            }
+        };
+
+        // Asignar el renderizador de celdas a la última columna
+        int lastColumnIndex = JTLibros.getColumnCount() - 1;
+        JTLibros.getColumnModel().getColumn(lastColumnIndex).setCellRenderer(columnRenderer);
         } catch (SQLException e) {
         }
     }
@@ -111,6 +167,17 @@ public class Frame_Libro extends javax.swing.JFrame {
     private void nuevo() {
         Nombre_Libro.setText(null);
         Fecha_Publicacion.setDate(null);
+    }
+    
+    public void nuevoMetodo(String parametro) {
+        libro.setId_Libro(Integer.parseInt(parametro));
+        int opcion = JOptionPane.showConfirmDialog(null, "¿Deseas eliminar el registro?", "Confirmación", JOptionPane.YES_NO_OPTION);
+        if (opcion == JOptionPane.YES_OPTION) {
+            libro.Eliminar_Libro();
+            ID_Libro.setText(null);
+            nuevo();
+            this.mostrar();
+        }
     }
 
     /**
@@ -139,6 +206,7 @@ public class Frame_Libro extends javax.swing.JFrame {
         JTLibros = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Frame Libro");
@@ -186,15 +254,15 @@ public class Frame_Libro extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 13)); // NOI18N
-        jLabel1.setText("Editorial");
+        jLabel1.setText("Editorial:");
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 13)); // NOI18N
-        jLabel2.setText("Nombre");
+        jLabel2.setText("Nombre:");
 
         Fecha_Publicacion.setDateFormatString("yyyy-MM-dd");
 
         jLabel3.setFont(new java.awt.Font("Verdana", 1, 13)); // NOI18N
-        jLabel3.setText("Autor");
+        jLabel3.setText("Autor:");
 
         Autores.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -208,10 +276,10 @@ public class Frame_Libro extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("Verdana", 1, 13)); // NOI18N
-        jLabel4.setText("Fecha de Publicacion:");
+        jLabel4.setText("Fecha de Publicación:");
 
         jLabel5.setFont(new java.awt.Font("Verdana", 1, 13)); // NOI18N
-        jLabel5.setText("Id Libro");
+        jLabel5.setText("Id Libro:");
 
         JTLibros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -232,9 +300,24 @@ public class Frame_Libro extends javax.swing.JFrame {
         jButton1.setText("Actualizar");
 
         jButton2.setBackground(new java.awt.Color(122, 141, 155));
-        jButton2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        jButton2.setFont(new java.awt.Font("Verdana", 1, 13)); // NOI18N
         jButton2.setForeground(new java.awt.Color(0, 33, 74));
-        jButton2.setText("Eliminar");
+        jButton2.setText("Agregar Autor");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setBackground(new java.awt.Color(122, 141, 155));
+        jButton3.setFont(new java.awt.Font("Verdana", 1, 13)); // NOI18N
+        jButton3.setForeground(new java.awt.Color(0, 33, 74));
+        jButton3.setText("Agregar Editorial");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -246,7 +329,7 @@ public class Frame_Libro extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(0, 0, Short.MAX_VALUE))
+                            .addGap(0, 0, 0))
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -254,25 +337,29 @@ public class Frame_Libro extends javax.swing.JFrame {
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(1, 1, 1)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(Autores, 0, 254, Short.MAX_VALUE)
-                    .addComponent(Fecha_Publicacion, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                    .addComponent(Autores, 0, 307, Short.MAX_VALUE)
                     .addComponent(Nombre_Libro)
-                    .addComponent(Editoriales, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ID_Libro))
-                .addGap(59, 59, 59)
+                    .addComponent(ID_Libro, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Fecha_Publicacion, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(Editoriales, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(63, 63, 63)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(Agregar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Nuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)))
-                    .addComponent(Regresar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(Agregar, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
+                        .addComponent(Nuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(Regresar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(56, 56, 56))
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 671, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addGap(21, 21, 21))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(167, 167, 167)
+                .addComponent(jButton2)
+                .addGap(63, 63, 63)
+                .addComponent(jButton3)
+                .addGap(190, 190, 190))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -280,34 +367,37 @@ public class Frame_Libro extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(ID_Libro, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5)
-                    .addComponent(Nuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(10, 10, 10)
+                    .addComponent(jLabel5))
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Editoriales, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(Agregar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Nuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Autores, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Agregar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(10, 10, 10)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Nombre_Libro, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(10, 10, 10)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(Regresar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(Fecha_Publicacion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jLabel4)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 38, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(20, 20, 20))
         );
 
@@ -321,7 +411,7 @@ public class Frame_Libro extends javax.swing.JFrame {
     }//GEN-LAST:event_RegresarActionPerformed
 
     private void EditorialesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditorialesActionPerformed
-
+        
     }//GEN-LAST:event_EditorialesActionPerformed
 
     private void AutoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AutoresActionPerformed
@@ -367,6 +457,20 @@ public class Frame_Libro extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_AgregarActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        Frame_Editorial editorial = new Frame_Editorial();
+        editorial.setVisible(true);
+        this.setVisible(false);
+        libro.cerrar();
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        Frame_Autor autor = new Frame_Autor();
+        autor.setVisible(true);
+        this.setVisible(false);
+        libro.cerrar();
+    }//GEN-LAST:event_jButton2ActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Agregar;
     private javax.swing.JComboBox<String> Autores;
@@ -379,6 +483,7 @@ public class Frame_Libro extends javax.swing.JFrame {
     private javax.swing.JToggleButton Regresar;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

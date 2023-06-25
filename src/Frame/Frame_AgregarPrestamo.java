@@ -44,7 +44,9 @@ public class Frame_AgregarPrestamo extends javax.swing.JFrame {
         getContentPane().setBackground(new java.awt.Color(237, 208, 198));
         initComponents();
         prestamo = new PrestamosBeans();
-        setSize(width / 3, height / 2);
+        setResizable(false);
+        int h = pantalla.height + 50;
+        setSize(width / 3, h / 3);
         setLocationRelativeTo(null);
         ID_Prestamo.setFocusable(false);
         ID_Prestamo.setText("" + prestamo.incremento());
@@ -411,10 +413,26 @@ public class Frame_AgregarPrestamo extends javax.swing.JFrame {
         try {
             result.next();
             result.getString(1);
+            int h = height - 80;
+            setSize(width / 3, h / 2);
             mostrar_Libro();
+            setLocationRelativeTo(null);
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "No hay registros");
+            Object[] options = {"Aceptar"};
+            int choice = JOptionPane.showOptionDialog(
+                    null,
+                    "No hay registros",
+                    "Mensaje",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.ERROR_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+            );
+            if (choice == 0) {
+                System.out.println("Se hizo clic en el botón Aceptar");
+            }
         }
 
 
@@ -437,7 +455,26 @@ public class Frame_AgregarPrestamo extends javax.swing.JFrame {
             setLocationRelativeTo(null);
 
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "No hay registros");
+            Object[] options = {"Agregar Cliente", "Cancelar"};
+            int choice = JOptionPane.showOptionDialog(
+                    null,
+                    "No hay registros",
+                    "Mensaje",
+                    JOptionPane.DEFAULT_OPTION,
+                    JOptionPane.ERROR_MESSAGE,
+                    null,
+                    options,
+                    options[0]
+            );
+            if (choice == 0) {
+                Frame_Persona persona = new Frame_Persona();
+                persona.setVisible(true);
+                this.setVisible(false);
+                prestamo.cerrar_Prestamo();
+                
+            } else if (choice == 1){
+                System.out.println("Se canceló");
+            }
         }
 
     }//GEN-LAST:event_Search_ClienteActionPerformed

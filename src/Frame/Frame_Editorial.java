@@ -4,12 +4,10 @@
  */
 package Frame;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
-import proyecto_biblioteca.AutorBeans;
 
 /**
  *
@@ -34,7 +32,8 @@ public class Frame_Editorial extends javax.swing.JFrame {
         int height = pantalla.height;
         int width = pantalla.width;
         setSize(width / 2, height / 2);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null);        
+        setResizable(false);
     }
 
     /**

@@ -47,6 +47,7 @@ public class Frame_Prestamo extends javax.swing.JFrame {
         prestamo = new PrestamosBeans();
         Existe_Cliente.setBackground(new java.awt.Color(237, 208, 198));
         setSize(width / 2, height / 3);
+        setResizable(false);
         setLocationRelativeTo(null);
         redimencionarBoton();
 
@@ -149,7 +150,6 @@ public class Frame_Prestamo extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Agregar_Devolucion = new javax.swing.JButton();
         Retornar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         Input_Cedula_Cliente = new javax.swing.JTextField();
@@ -162,16 +162,6 @@ public class Frame_Prestamo extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Prestamos");
         setIconImage(getIconImage());
-
-        Agregar_Devolucion.setBackground(new java.awt.Color(122, 141, 155));
-        Agregar_Devolucion.setFont(new java.awt.Font("Verdana", 1, 13)); // NOI18N
-        Agregar_Devolucion.setForeground(new java.awt.Color(0, 33, 74));
-        Agregar_Devolucion.setText("Devolucion Libro");
-        Agregar_Devolucion.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                Agregar_DevolucionActionPerformed(evt);
-            }
-        });
 
         Retornar.setBackground(new java.awt.Color(122, 141, 155));
         Retornar.setFont(new java.awt.Font("Verdana", 1, 13)); // NOI18N
@@ -261,7 +251,6 @@ public class Frame_Prestamo extends javax.swing.JFrame {
                         .addComponent(Existe_Cliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(23, 23, 23)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(Agregar_Devolucion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Retornar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Agregar_Prestamo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(28, 28, 28))
@@ -276,11 +265,9 @@ public class Frame_Prestamo extends javax.swing.JFrame {
                     .addComponent(Buscar_Cliente, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(25, 25, 25)
+                        .addGap(46, 46, 46)
                         .addComponent(Agregar_Prestamo, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15)
-                        .addComponent(Agregar_Devolucion, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(15, 15, 15)
+                        .addGap(18, 18, 18)
                         .addComponent(Retornar, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -297,13 +284,6 @@ public class Frame_Prestamo extends javax.swing.JFrame {
         prestamo.cerrar_Prestamo();
         this.setVisible(false);
     }//GEN-LAST:event_RetornarActionPerformed
-
-    private void Agregar_DevolucionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Agregar_DevolucionActionPerformed
-        Frame_Devolucion devolucion = new Frame_Devolucion();
-        devolucion.setVisible(true);
-        prestamo.cerrar_Prestamo();
-        this.setVisible(false);
-    }//GEN-LAST:event_Agregar_DevolucionActionPerformed
 
     private void Buscar_ClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Buscar_ClienteActionPerformed
 
@@ -329,7 +309,6 @@ public class Frame_Prestamo extends javax.swing.JFrame {
     }//GEN-LAST:event_Input_Cedula_ClienteActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton Agregar_Devolucion;
     private javax.swing.JButton Agregar_Prestamo;
     private javax.swing.JButton Buscar_Cliente;
     private javax.swing.JPanel Existe_Cliente;
