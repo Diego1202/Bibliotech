@@ -50,7 +50,6 @@ public class AccesoBD {
             conexion = DriverManager.getConnection(cadena, this.getUser(), this.getPassword());
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | SQLException e) {
             System.out.println("Error de conexion a la base de datos " + e.getMessage());
-            System.out.println("Error de conexion mensaje " + e.getMessage());
         }
     }
 
