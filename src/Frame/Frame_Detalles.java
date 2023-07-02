@@ -52,7 +52,6 @@ public class Frame_Detalles extends javax.swing.JFrame {
 
     private void rellenar() {
         devolucion.setId_Prestamo(id_Prestamo);
-        System.out.println("El id del prestamo es: " + devolucion.getId_Prestamo());
         ResultSet result = devolucion.Consultar_Prestamos();
         try {
             while (result.next()) {

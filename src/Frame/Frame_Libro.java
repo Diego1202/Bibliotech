@@ -84,7 +84,6 @@ public class Frame_Libro extends javax.swing.JFrame {
     }
 
     private void actualizarInformacion(String valorSeleccionado) {
-        System.out.println("El dato que comparará es: " + valorSeleccionado);
         libro.setId_Libro(Integer.parseInt(valorSeleccionado));
         ResultSet result = libro.Consultar_Libro_ID();
         try {
@@ -105,7 +104,6 @@ public class Frame_Libro extends javax.swing.JFrame {
 
     private void seleccionarElemento(JComboBox combo, String nombre) {
         for (int i = 0; i < combo.getItemCount(); i++) {
-            System.out.println("El dato enviado es: " + nombre + "\tEl dato que compara es: " + combo.getItemAt(i));
             if (combo.getItemAt(i).toString().equals(nombre)) {
                 combo.setSelectedItem(combo.getItemAt(i));
                 break;
