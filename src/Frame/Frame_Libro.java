@@ -30,7 +30,7 @@ import proyecto_biblioteca.LibroBeans;
  *
  * @author ceden
  */
-public class Frame_Libro extends javax.swing.JFrame {
+public final class Frame_Libro extends javax.swing.JFrame {
 
     LibroBeans libro;
 
@@ -39,11 +39,8 @@ public class Frame_Libro extends javax.swing.JFrame {
      */
     public Frame_Libro() {
         try {
-            // Establecer el tema "Nimbus" como el aspecto visual
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (ClassNotFoundException | IllegalAccessException | InstantiationException | UnsupportedLookAndFeelException ex) {
-            // Manejar cualquier excepción que ocurra al establecer el tema
-            ex.printStackTrace();
         }
         getContentPane().setBackground(new java.awt.Color(237, 208, 198));
 
