@@ -11,10 +11,10 @@ import java.sql.*;
  * @author ceden
  */
 public class AccesoBD {
-    private String host;
-    private String user;
-    private String password;
-    private String bd;
+    private final String host;
+    private final String user;
+    private final String password;
+    private final String bd;
 
     //Abre o Cierra conexion
     private Connection conexion;
@@ -30,32 +30,16 @@ public class AccesoBD {
         return host;
     }
 
-    public void setHost(String host) {
-        this.host = host;
-    }
-
     public String getUser() {
         return user;
-    }
-
-    public void setUser(String user) {
-        this.user = user;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public String getBd() {
         return bd;
-    }
-
-    public void setBd(String bd) {
-        this.bd = bd;
     }
 
     public void conectarBD() {
